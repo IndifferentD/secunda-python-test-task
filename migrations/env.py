@@ -7,9 +7,10 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 from payment_service.src.config import CommonSettings
 from payment_service.src.models import Base
 
-
 config = context.config
-config.set_main_option("sqlalchemy.url", CommonSettings().database_url.replace("%", "%%"))
+config.set_main_option(
+    "sqlalchemy.url", CommonSettings().database_url.replace("%", "%%")
+)
 target_metadata = Base.metadata
 
 

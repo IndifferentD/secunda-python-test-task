@@ -18,7 +18,11 @@ def create_app(settings: ApiSettings) -> FastAPI:
         if supplied_key is None or not compare_digest(supplied_key, api_key):
             raise HTTPException(status_code=401, detail="Invalid API key")
 
-    app = FastAPI(title="Сервис обработки платежей", dependencies=[Depends(check_api_key)])
+    app = FastAPI(
+        title="Сервис обработки платежей", dependencies=[Depends(check_api_key)]
+    )
     sessions = create_session_factory(settings.database_url)
-    app.include_router(create_router(PaymentService(sessions, PaymentRepository())), prefix="/api/v1")
+    app.include_router(
+        create_router(PaymentService(sessions, PaymentRepository())), prefix="/api/v1"
+    )
     return app

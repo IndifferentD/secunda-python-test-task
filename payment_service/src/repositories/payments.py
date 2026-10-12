@@ -7,10 +7,14 @@ from payment_service.src.models import OutboxEvent, Payment
 
 
 class PaymentRepository:
-    async def get_by_id(self, session: AsyncSession, payment_id: UUID) -> Payment | None:
+    async def get_by_id(
+        self, session: AsyncSession, payment_id: UUID
+    ) -> Payment | None:
         return await session.get(Payment, payment_id)
 
-    async def get_by_key(self, session: AsyncSession, idempotency_key: str) -> Payment | None:
+    async def get_by_key(
+        self, session: AsyncSession, idempotency_key: str
+    ) -> Payment | None:
         return await session.scalar(
             select(Payment).where(Payment.idempotency_key == idempotency_key)
         )

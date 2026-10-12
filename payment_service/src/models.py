@@ -17,7 +17,9 @@ class CurrencyType(TypeDecorator[Currency]):
     def process_bind_param(self, value: Currency | None, dialect: object) -> str | None:
         return value.value if value is not None else None
 
-    def process_result_value(self, value: str | None, dialect: object) -> Currency | None:
+    def process_result_value(
+        self, value: str | None, dialect: object
+    ) -> Currency | None:
         return Currency(value) if value is not None else None
 
 
@@ -25,10 +27,14 @@ class PaymentStatusType(TypeDecorator[PaymentStatus]):
     impl = Text
     cache_ok = True
 
-    def process_bind_param(self, value: PaymentStatus | None, dialect: object) -> str | None:
+    def process_bind_param(
+        self, value: PaymentStatus | None, dialect: object
+    ) -> str | None:
         return value.value if value is not None else None
 
-    def process_result_value(self, value: str | None, dialect: object) -> PaymentStatus | None:
+    def process_result_value(
+        self, value: str | None, dialect: object
+    ) -> PaymentStatus | None:
         return PaymentStatus(value) if value is not None else None
 
 
@@ -50,7 +56,9 @@ class Payment(Base):
     status: Mapped[PaymentStatus] = mapped_column(PaymentStatusType())
     idempotency_key: Mapped[str] = mapped_column(Text)
     webhook_url: Mapped[str] = mapped_column(Text)
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
 
 
 class OutboxEvent(Base):
@@ -58,5 +66,7 @@ class OutboxEvent(Base):
 
     id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
     payment_id: Mapped[UUID] = mapped_column(ForeignKey("payments.id"))
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
     published_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))

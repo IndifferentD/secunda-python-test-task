@@ -2,8 +2,16 @@ from uuid import UUID
 
 from fastapi import APIRouter, Header, HTTPException
 
-from payment_service.src.services.payments import IdempotencyConflict, PaymentData, PaymentService
-from payment_service.src.web.schemas import PaymentCreate, PaymentCreated, PaymentDetails
+from payment_service.src.services.payments import (
+    IdempotencyConflict,
+    PaymentData,
+    PaymentService,
+)
+from payment_service.src.web.schemas import (
+    PaymentCreate,
+    PaymentCreated,
+    PaymentDetails,
+)
 
 
 def create_router(service: PaymentService) -> APIRouter:
