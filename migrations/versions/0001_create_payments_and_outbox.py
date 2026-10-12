@@ -27,7 +27,7 @@ def upgrade() -> None:
     )
 
     op.create_table(
-        "outbox",
+        "payment_outbox",
         sa.Column("id", postgresql.UUID(as_uuid=True), primary_key=True),
         sa.Column("payment_id", postgresql.UUID(as_uuid=True), nullable=False),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False, server_default=sa.func.now()),
@@ -37,5 +37,5 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    op.drop_table("outbox")
+    op.drop_table("payment_outbox")
     op.drop_table("payments")

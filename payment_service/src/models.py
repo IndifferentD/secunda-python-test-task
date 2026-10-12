@@ -29,7 +29,7 @@ class Payment(Base):
 
 
 class OutboxEvent(Base):
-    __tablename__ = "outbox"
+    __tablename__ = "payment_outbox"
 
     id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
     payment_id: Mapped[UUID] = mapped_column(ForeignKey("payments.id"))
