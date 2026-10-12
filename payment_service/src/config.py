@@ -19,7 +19,6 @@ class OutboxSettings(CommonSettings):
 
 class WorkerSettings(CommonSettings):
     rabbitmq_url: str
-    gateway_attempts: int = Field(default=3, ge=1)
     webhook_attempts: int = Field(default=3, ge=1)
     retry_base_seconds: float = Field(default=1.0, gt=0)
     webhook_timeout_seconds: float = Field(default=5.0, gt=0)

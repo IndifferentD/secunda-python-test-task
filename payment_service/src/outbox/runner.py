@@ -5,7 +5,7 @@ from faststream.rabbit import Channel, RabbitBroker
 
 from payment_service.src.config import OutboxSettings
 from payment_service.src.db import create_session_factory
-from payment_service.src.messaging import PAYMENTS_NEW_QUEUE
+from payment_service.src.messaging import declare_payment_queues
 from payment_service.src.outbox.publisher import OUTBOX_BATCH_SIZE, OutboxPublisher
 from payment_service.src.outbox.repository import OutboxRepository
 
@@ -17,9 +17,9 @@ async def run(settings: OutboxSettings) -> None:
     async with RabbitBroker(
         settings.rabbitmq_url,
         default_channel=Channel(on_return_raises=True),
-        logger=logging.getLogger("payment_service.faststream"),
+        logger=logger,
     ) as broker:
-        await broker.declare_queue(PAYMENTS_NEW_QUEUE)
+        await declare_payment_queues(broker)
         publisher = OutboxPublisher(sessions, OutboxRepository(), broker)
 
         while True:

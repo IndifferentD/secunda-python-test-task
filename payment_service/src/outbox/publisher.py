@@ -3,7 +3,7 @@ from datetime import UTC, datetime
 from faststream.rabbit import RabbitBroker
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
-from payment_service.src.messaging import PAYMENTS_NEW_QUEUE
+from payment_service.src.messaging import PAYMENTS_NEW_QUEUE, PaymentMessage
 from payment_service.src.outbox.repository import OutboxRepository
 
 OUTBOX_BATCH_SIZE = 100
@@ -27,7 +27,7 @@ class OutboxPublisher:
             )
             for event in events:
                 await self.publisher.publish(
-                    {"payment_id": str(event.payment_id)},
+                    PaymentMessage(payment_id=event.payment_id),
                     message_id=str(event.id),
                 )
                 event.published_at = datetime.now(UTC)
