@@ -23,6 +23,7 @@ class PaymentCreated(BaseModel):
 
 
 class PaymentDetails(PaymentCreated):
+    processed_at: datetime | None
     amount: Decimal
     currency: Currency
     description: str

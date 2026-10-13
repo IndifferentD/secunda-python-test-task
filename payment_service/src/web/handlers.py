@@ -51,6 +51,7 @@ def create_router(service: PaymentService) -> APIRouter:
             payment_id=payment.id,
             status=payment.status,
             created_at=payment.created_at,
+            processed_at=payment.processed_at,
             amount=payment.amount,
             currency=payment.currency,
             description=payment.description,

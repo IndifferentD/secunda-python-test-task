@@ -23,6 +23,7 @@ def upgrade() -> None:
         sa.Column("idempotency_key", sa.Text(), nullable=False),
         sa.Column("webhook_url", sa.Text(), nullable=False),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False, server_default=sa.func.now()),
+        sa.Column("processed_at", sa.DateTime(timezone=True), nullable=True),
         sa.UniqueConstraint("idempotency_key", name="uq_payments_idempotency_key"),
     )
 

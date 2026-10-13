@@ -1,3 +1,4 @@
+from datetime import UTC, datetime
 from uuid import UUID
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
@@ -33,6 +34,7 @@ class PaymentProcessor:
 
             if payment.status == PaymentStatus.PENDING:
                 payment.status = await self.gateway.process(payment)
+                payment.processed_at = datetime.now(UTC)
 
             status = payment.status
             webhook_url = payment.webhook_url
