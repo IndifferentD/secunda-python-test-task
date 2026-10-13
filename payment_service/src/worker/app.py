@@ -24,7 +24,6 @@ async def run(settings: WorkerSettings) -> None:
     broker = RabbitBroker(
         settings.rabbitmq_url,
         default_channel=Channel(prefetch_count=10),
-        logger=logger,
     )
 
     sessions = create_session_factory(settings.database_url)
@@ -46,6 +45,14 @@ async def run(settings: WorkerSettings) -> None:
     ) -> None:
         try:
             await processor.process(message.payment_id)
+        except httpx.HTTPError as exc:
+            logger.error(
+                "Failed to send webhook for payment %s: %s: %s",
+                message.payment_id,
+                type(exc).__name__,
+                exc,
+            )
+            await raw_message.reject(requeue=True)
         except Exception:
             logger.exception("Failed to process payment message")
             await raw_message.reject(requeue=True)

@@ -1,9 +1,12 @@
 import asyncio
+import logging
 from uuid import UUID
 
 import httpx
 
 from payment_service.src.enums import PaymentStatus
+
+logger = logging.getLogger(__name__)
 
 
 class WebhookSender:
@@ -23,7 +26,15 @@ class WebhookSender:
                 )
                 response.raise_for_status()
                 return
-            except httpx.HTTPError:
+            except httpx.HTTPError as exc:
                 if attempt == self.max_attempts - 1:
                     raise
+                logger.warning(
+                    "Webhook attempt %d/%d failed for payment %s: %s: %s",
+                    attempt + 1,
+                    self.max_attempts,
+                    payment_id,
+                    type(exc).__name__,
+                    exc,
+                )
                 await asyncio.sleep(self.retry_base_seconds * 2**attempt)
