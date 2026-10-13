@@ -1,14 +1,12 @@
 x-app: &app
   build: .
   image: secunda-payment-service:local
+  env_file: .env
 
 services:
   postgres:
     image: postgres:17-alpine
-    environment:
-      POSTGRES_DB: payments
-      POSTGRES_USER: payment
-      POSTGRES_PASSWORD: payment
+    env_file: .env
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -19,9 +17,7 @@ services:
 
   rabbitmq:
     image: rabbitmq:4.3-management
-    environment:
-      RABBITMQ_DEFAULT_USER: payment
-      RABBITMQ_DEFAULT_PASS: payment
+    env_file: .env
     ports:
       - "15672:15672"
     volumes:
@@ -35,8 +31,6 @@ services:
   migrate:
     <<: *app
     command: ["alembic", "upgrade", "head"]
-    environment:
-      DATABASE_URL: postgresql+asyncpg://payment:payment@postgres:5432/payments
     depends_on:
       postgres:
         condition: service_healthy
@@ -44,9 +38,6 @@ services:
   api:
     <<: *app
     command: ["api"]
-    environment:
-      DATABASE_URL: postgresql+asyncpg://payment:payment@postgres:5432/payments
-      API_KEY: ${API_KEY:-local-api-key}
     ports:
       - "8000:8000"
     depends_on:
@@ -56,9 +47,6 @@ services:
   outbox:
     <<: *app
     command: ["outbox"]
-    environment:
-      DATABASE_URL: postgresql+asyncpg://payment:payment@postgres:5432/payments
-      RABBITMQ_URL: amqp://payment:payment@rabbitmq:5672/
     depends_on:
       migrate:
         condition: service_completed_successfully
@@ -68,9 +56,6 @@ services:
   worker:
     <<: *app
     command: ["worker"]
-    environment:
-      DATABASE_URL: postgresql+asyncpg://payment:payment@postgres:5432/payments
-      RABBITMQ_URL: amqp://payment:payment@rabbitmq:5672/
     depends_on:
       migrate:
         condition: service_completed_successfully
