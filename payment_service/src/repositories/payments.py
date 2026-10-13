@@ -19,6 +19,5 @@ class PaymentRepository:
             select(Payment).where(Payment.idempotency_key == idempotency_key)
         )
 
-    async def insert_with_outbox(self, session: AsyncSession, payment: Payment) -> None:
-        session.add_all([payment, OutboxEvent(payment_id=payment.id)])
-        await session.flush()
+    def insert_with_outbox(self, session: AsyncSession, payment: Payment) -> None:
+        session.add_all([payment, OutboxEvent(payment=payment)])

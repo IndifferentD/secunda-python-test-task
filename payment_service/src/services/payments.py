@@ -51,7 +51,7 @@ class PaymentService:
                     idempotency_key=idempotency_key,
                     webhook_url=data.webhook_url,
                 )
-                await self.repository.insert_with_outbox(session, payment)
+                self.repository.insert_with_outbox(session, payment)
                 return payment
         except IntegrityError:
             async with self.sessions.begin() as session:

@@ -4,7 +4,7 @@ from uuid import UUID, uuid4
 
 from sqlalchemy import DateTime, Enum, ForeignKey, Numeric, Text, UniqueConstraint, func
 from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 from payment_service.src.enums import Currency, PaymentStatus
 
@@ -47,6 +47,7 @@ class OutboxEvent(Base):
 
     id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
     payment_id: Mapped[UUID] = mapped_column(ForeignKey("payments.id"))
+    payment: Mapped[Payment] = relationship()
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
