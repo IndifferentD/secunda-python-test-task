@@ -34,7 +34,7 @@ async def run(settings: WorkerSettings) -> None:
         WorkerPaymentRepository(),
         SimulatedPaymentGateway(),
         WebhookSender(
-            http_client, settings.webhook_attempts, settings.retry_base_seconds
+            http_client, settings.webhook_max_attempts, settings.retry_base_seconds
         ),
     )
     app = FastStream(broker)
