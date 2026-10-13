@@ -16,10 +16,10 @@ def upgrade() -> None:
         "payments",
         sa.Column("id", postgresql.UUID(as_uuid=True), primary_key=True),
         sa.Column("amount", sa.Numeric(), nullable=False),
-        sa.Column("currency", sa.Text(), nullable=False),
+        sa.Column("currency", sa.Enum("RUB", "USD", "EUR", name="currency"), nullable=False),
         sa.Column("description", sa.Text(), nullable=False),
         sa.Column("metadata", postgresql.JSONB(), nullable=False),
-        sa.Column("status", sa.Text(), nullable=False),
+        sa.Column("status", sa.Enum("pending", "succeeded", "failed", name="paymentstatus"), nullable=False),
         sa.Column("idempotency_key", sa.Text(), nullable=False),
         sa.Column("webhook_url", sa.Text(), nullable=False),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False, server_default=sa.func.now()),
@@ -39,3 +39,5 @@ def upgrade() -> None:
 def downgrade() -> None:
     op.drop_table("payment_outbox")
     op.drop_table("payments")
+    sa.Enum(name="paymentstatus").drop(op.get_bind())
+    sa.Enum(name="currency").drop(op.get_bind())
