@@ -48,7 +48,6 @@ async def run(settings: WorkerSettings) -> None:
             await processor.process(message.payment_id)
         except Exception:
             logger.exception("Failed to process payment message")
-            # RabbitMQ 4.3 считает reject неудачной доставкой, а nack — нет.
             await raw_message.reject(requeue=True)
         else:
             await raw_message.ack()
