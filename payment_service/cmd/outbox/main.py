@@ -7,7 +7,7 @@ from payment_service.src.outbox.runner import run
 
 def main() -> None:
     configure_logging("outbox")
-    asyncio.run(run(OutboxSettings()))
+    asyncio.run(run(OutboxSettings()))  # pyright: ignore[reportCallIssue]
 
 
 if __name__ == "__main__":

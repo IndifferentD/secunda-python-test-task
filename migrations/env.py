@@ -9,7 +9,8 @@ from payment_service.src.models import Base
 
 config = context.config
 config.set_main_option(
-    "sqlalchemy.url", CommonSettings().database_url.replace("%", "%%")
+    "sqlalchemy.url",
+    CommonSettings().database_url.replace("%", "%%"),  # pyright: ignore[reportCallIssue]
 )
 target_metadata = Base.metadata
 

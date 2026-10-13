@@ -7,7 +7,7 @@ from payment_service.src.worker.app import run
 
 def main() -> None:
     configure_logging("worker")
-    asyncio.run(run(WorkerSettings()))
+    asyncio.run(run(WorkerSettings()))  # pyright: ignore[reportCallIssue]
 
 
 if __name__ == "__main__":
