@@ -5,9 +5,9 @@ from fastapi.security import APIKeyHeader
 
 from payment_service.src.config import ApiSettings
 from payment_service.src.db import create_session_factory
-from payment_service.src.repositories.payments import PaymentRepository
-from payment_service.src.services.payments import PaymentService
 from payment_service.src.web.handlers import create_router
+from payment_service.src.web.repository import PaymentRepository
+from payment_service.src.web.service import PaymentService
 
 
 def create_app(settings: ApiSettings) -> FastAPI:

@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from payment_service.src.enums import Currency, PaymentStatus
 from payment_service.src.models import Payment
-from payment_service.src.repositories.payments import PaymentRepository
+from payment_service.src.web.repository import PaymentRepository
 
 
 @dataclass(frozen=True)
