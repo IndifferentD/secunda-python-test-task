@@ -31,8 +31,15 @@ module-root = ""
 
 [dependency-groups]
 dev = [
+    "basedpyright>=1.40.2",
     "ruff>=0.17.0",
 ]
 
 [tool.ruff]
 extend-exclude = ["migrations/versions"]
+
+[tool.basedpyright]
+typeCheckingMode = "standard"
+exclude = ["migrations"]
+venvPath = "."
+venv = ".venv"
