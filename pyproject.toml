@@ -16,8 +16,18 @@ dependencies = [
     "uvicorn>=0.35,<1",
 ]
 
-[tool.uv]
-package = false
+[project.scripts]
+api = "payment_service.cmd.api.main:main"
+worker = "payment_service.cmd.worker.main:main"
+outbox = "payment_service.cmd.outbox.main:main"
+
+[build-system]
+requires = ["uv_build>=0.12.22,<0.13"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "payment_service"
+module-root = ""
 
 [dependency-groups]
 dev = [
